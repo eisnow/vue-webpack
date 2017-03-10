@@ -4,7 +4,13 @@
     <p v-show="!products.length"><i>Please add some products to cart.</i></p>
     <ul>
       <li v-for="p in products">
-        {{ p.title }} - {{ p.price | currency }} x {{ p.quantity }}
+        {{ p.title }} - {{ p.price | currency }} x 
+        <input type="number" v-model="p.quantity" @input="changeQuantity(p)">
+      </li>
+    </ul>
+    <ul>
+      <li v-for="p in products">
+        {{ p.title }} - {{ p.price | currency }} x {{p.quantity}}
       </li>
     </ul>
     <p>Total: {{ total | currency }}</p>
@@ -17,6 +23,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import * as ACTIONS from '../store/action-types'
 export default {
   computed: {
     ...mapGetters({
@@ -31,7 +38,10 @@ export default {
   },
   methods: {
     checkout (products) {
-      this.$store.dispatch('checkout', products)
+      this.$store.dispatch(ACTIONS.checkout, products)
+    },
+    changeQuantity (p) {
+      this.$store.dispatch(ACTIONS.changeQuantity, p)
     }
   }
 }

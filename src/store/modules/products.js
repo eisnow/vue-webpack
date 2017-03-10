@@ -1,5 +1,6 @@
 import shop from '../../apis/shop'
-import * as types from '../mutation-types'
+import * as ACTIONS from '../action-types'
+import * as MUTATIONS from '../mutation-types'
 
 // initial state
 const state = {
@@ -13,21 +14,31 @@ const getters = {
 
 // actions
 const actions = {
-  getAllProducts ({ commit }) {
-    shop.getProducts(products => {
-      commit(types.RECEIVE_PRODUCTS, { products })
+  [ACTIONS.getAllProducts] ({ commit }) {
+    shop.getProducts().then(products => {
+      commit(MUTATIONS.RECEIVE_PRODUCTS, { products })
     })
   }
 }
 
 // mutations
 const mutations = {
-  [types.RECEIVE_PRODUCTS] (state, { products }) {
+  [MUTATIONS.RECEIVE_PRODUCTS] (state, { products }) {
     state.all = products
   },
 
-  [types.ADD_TO_CART] (state, { id }) {
-    state.all.find(p => p.id === id).inventory--
+  [MUTATIONS.ADD_TO_CART] (state, { id }) {
+    changeInventory(state.all.find(p => p.id === id), 1)
+  },
+
+  [MUTATIONS.CHANGE_INVENTORY] (state, { id, quantity }) {
+    changeInventory(state.all.find(p => p.id === id), quantity)
+  }
+}
+
+function changeInventory (product, quantity) {
+  if (product) {
+    product.inventory -= quantity
   }
 }
 

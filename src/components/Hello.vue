@@ -3,6 +3,15 @@
     <h1>{{ msg }}</h1>
     <h1>{{ $t("msgs.hello") }}</h1>
     <h1>{{ $t("msgs.yes") }}</h1>
+    <h2>Children</h2>
+    <ul>
+      <li>
+        <router-link to="/products"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>Products</router-link>
+      </li>
+      <li>
+        <router-link to="/cart"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>Cart</router-link>
+      </li>
+    </ul>
     <h2>Essential Links</h2>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
@@ -18,15 +27,6 @@
       <li><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
       <li><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-    <h2>Children</h2>
-    <ul>
-      <li>
-        <router-link to="/products"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>Products</router-link>
-      </li>
-      <li>
-        <router-link to="/cart"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>Cart</router-link>
-      </li>
     </ul>
   </div>
 </template>

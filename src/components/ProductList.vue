@@ -1,8 +1,9 @@
 <template>
   <div>
+    <h1>{{testMessage}}</h1>
     <ul>
       <li v-for="p in products">
-        {{ p.title }} - {{ p.price | currency }}
+        {{ p.title }} - {{ p.price | currency }} - {{p.inventory}}
         <br>
         <button :disabled="!p.inventory" @click="addToCart(p)">
         Add to cart
@@ -15,15 +16,19 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapActions } from 'vuex'
   export default {
-    computed: mapGetters({
-      products: 'allProducts'
-    }),
+    computed: {
+      products () {
+        return this.$store.getters.allProducts
+      },
+      testMessage: () => 'Now is ' + Date.now()
+    },
     methods: mapActions([
       'addToCart'
     ]),
     created () {
+      console.log(this.$store)
       this.$store.dispatch('getAllProducts')
     }
   }

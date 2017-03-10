@@ -15,7 +15,10 @@ import App from './App'
 Vue.use(VueResource)
 Vue.use(VueI18n)
 
-Promise.all([language.load('zh-CN')]).then(() => {
+const DEFAULT_LANG = 'zh-CN'
+
+Promise.all([language.load(DEFAULT_LANG)]).then(() => {
+  Vue.config.fallbackLang = DEFAULT_LANG
   /* eslint-disable no-new */
   new Vue({
     el: '#app',

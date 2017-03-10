@@ -1,5 +1,6 @@
 import shop from '../../apis/shop'
-import * as types from '../mutation-types'
+import * as ACTIONS from '../action-types'
+import * as MUTATIONS from '../mutation-types'
 
 // initial state
 // shape: [{ id, quantity }]
@@ -10,25 +11,51 @@ const state = {
 
 // getters
 const getters = {
-  checkoutStatus: state => state.checkoutStatus
+  checkoutStatus: state => state.checkoutStatus,
+  cartProducts: (state, gettes, rootState) => {
+    return state.added.map(({ id, quantity }) => {
+      const product = rootState.products.all.find(p => p.id === id)
+      return {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity
+      }
+    })
+  }
 }
 
 // actions
 const actions = {
-  checkout ({ commit, state }, products) {
+  [ACTIONS.addToCart] ({ commit }, product) {
+    if (product.inventory > 0) {
+      commit(MUTATIONS.ADD_TO_CART, {
+        id: product.id
+      })
+    }
+  },
+  [ACTIONS.checkout] ({ commit, state }, products) {
     const savedCartItems = [...state.added]
-    commit(types.CHECKOUT_REQUEST)
+    commit(MUTATIONS.CHECKOUT_REQUEST)
     shop.buyProducts(
       products,
-      () => commit(types.CHECKOUT_SUCCESS),
-      () => commit(types.CHECKOUT_FAILURE, { savedCartItems })
+      () => commit(MUTATIONS.CHECKOUT_SUCCESS),
+      () => commit(MUTATIONS.CHECKOUT_FAILURE, { savedCartItems })
     )
+  },
+  [ACTIONS.changeQuantity] ({ commit, state }, { id, quantity }) {
+    const record = state.added.find(p => p.id === id)
+    if (record) {
+      let change = quantity - record.quantity
+      commit(MUTATIONS.CHANGE_QUANTITY_IN_CART, {id: record.id, quantity: change})
+      commit(MUTATIONS.CHANGE_INVENTORY, {id: record.id, quantity: change})
+    }
   }
 }
 
 // mutations
 const mutations = {
-  [types.ADD_TO_CART] (state, { id }) {
+  [MUTATIONS.ADD_TO_CART] (state, { id }) {
     state.lastCheckout = null
     const record = state.added.find(p => p.id === id)
     if (!record) {
@@ -40,18 +67,24 @@ const mutations = {
       record.quantity++
     }
   },
+  [MUTATIONS.CHANGE_QUANTITY_IN_CART] (state, { id, quantity }) {
+    const record = state.added.find(p => p.id === id)
+    if (record) {
+      record.quantity += quantity
+    }
+  },
 
-  [types.CHECKOUT_REQUEST] (state) {
+  [MUTATIONS.CHECKOUT_REQUEST] (state) {
     // clear cart
     state.added = []
     state.checkoutStatus = null
   },
 
-  [types.CHECKOUT_SUCCESS] (state) {
+  [MUTATIONS.CHECKOUT_SUCCESS] (state) {
     state.checkoutStatus = 'successful'
   },
 
-  [types.CHECKOUT_FAILURE] (state, { savedCartItems }) {
+  [MUTATIONS.CHECKOUT_FAILURE] (state, { savedCartItems }) {
     // rollback to the cart saved before sending the request
     state.added = savedCartItems
     state.checkoutStatus = 'failed'
