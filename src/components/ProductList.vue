@@ -16,20 +16,21 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+  import { GETTERS, ACTIONS } from '../store/types'
+
   export default {
     computed: {
-      products () {
-        return this.$store.getters.allProducts
-      },
+      ...mapGetters({
+        products: GETTERS.allProducts
+      }),
       testMessage: () => 'Now is ' + Date.now()
     },
     methods: mapActions([
-      'addToCart'
+      ACTIONS.addToCart
     ]),
     created () {
-      console.log(this.$store)
-      this.$store.dispatch('getAllProducts')
+      this.$store.dispatch(ACTIONS.getAllProducts)
     }
   }
 

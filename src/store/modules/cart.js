@@ -1,6 +1,5 @@
 import shop from '../../apis/shop'
-import * as ACTIONS from '../action-types'
-import * as MUTATIONS from '../mutation-types'
+import { GETTERS, ACTIONS, MUTATIONS } from '../types'
 
 // initial state
 // shape: [{ id, quantity }]
@@ -11,8 +10,8 @@ const state = {
 
 // getters
 const getters = {
-  checkoutStatus: state => state.checkoutStatus,
-  cartProducts: (state, gettes, rootState) => {
+  [GETTERS.checkoutStatus]: state => state.checkoutStatus,
+  [GETTERS.cartProducts]: (state, gettes, rootState) => {
     return state.added.map(({ id, quantity }) => {
       const product = rootState.products.all.find(p => p.id === id)
       return {
@@ -34,7 +33,7 @@ const actions = {
       })
     }
   },
-  [ACTIONS.checkout] ({ commit, state }, products) {
+  [ACTIONS.checkout] ({ commit, state, rootState }, products) {
     const savedCartItems = [...state.added]
     commit(MUTATIONS.CHECKOUT_REQUEST)
     shop.buyProducts(

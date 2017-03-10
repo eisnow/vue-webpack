@@ -1,6 +1,5 @@
 import shop from '../../apis/shop'
-import * as ACTIONS from '../action-types'
-import * as MUTATIONS from '../mutation-types'
+import { GETTERS, ACTIONS, MUTATIONS } from '../types'
 
 // initial state
 const state = {
@@ -9,7 +8,7 @@ const state = {
 
 // getters
 const getters = {
-  allProducts: state => state.all
+  [GETTERS.allProducts]: state => state.all
 }
 
 // actions

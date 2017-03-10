@@ -23,12 +23,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import * as ACTIONS from '../store/action-types'
+import { GETTERS, ACTIONS } from '../store/types'
 export default {
   computed: {
     ...mapGetters({
-      products: 'cartProducts',
-      checkoutStatus: 'checkoutStatus'
+      products: GETTERS.cartProducts,
+      checkoutStatus: GETTERS.checkoutStatus
     }),
     total () {
       return this.products.reduce((total, p) => {
