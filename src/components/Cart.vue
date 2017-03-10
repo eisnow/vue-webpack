@@ -4,16 +4,16 @@
     <p v-show="!products.length"><i>Please add some products to cart.</i></p>
     <ul>
       <li v-for="p in products">
-        {{ p.title }} - {{ p.price | currency }} x 
-        <input type="number" v-model="p.quantity" @input="changeQuantity(p)">
+        {{ p.title }} - {{ p.price | currency('RMB: ') }} x 
+        <input type="number" v-model="p.quantity" @blur="changeQuantity(p)">
       </li>
     </ul>
     <ul>
       <li v-for="p in products">
-        {{ p.title }} - {{ p.price | currency }} x {{p.quantity}}
+        {{ p.title }} - {{ p.price | currency('RMB: ') }} x {{p.quantity}}
       </li>
     </ul>
-    <p>Total: {{ total | currency }}</p>
+    <p>Total: {{ total | currency('RMB: ') }}</p>
     <p><button :disabled="!products.length" @click="checkout(products)">Checkout</button></p>
     <p v-show="checkoutStatus">Checkout {{ checkoutStatus }}.</p>
     <router-link to="/products"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>Back to Products</router-link>

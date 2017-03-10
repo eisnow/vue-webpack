@@ -3,7 +3,7 @@
     <h1>{{testMessage}}</h1>
     <ul>
       <li v-for="p in products">
-        {{ p.title }} - {{ p.price | currency }} - {{p.inventory}}
+        {{ p.title }} - {{ p.price | currency('RMB: ') }} - {{p.inventory}}
         <br>
         <button :disabled="!p.inventory" @click="addToCart(p)">
         Add to cart
@@ -27,10 +27,11 @@
       testMessage: () => 'Now is ' + Date.now()
     },
     methods: mapActions([
-      ACTIONS.addToCart
+      ACTIONS.addToCart,
+      ACTIONS.getAllProducts
     ]),
     created () {
-      this.$store.dispatch(ACTIONS.getAllProducts)
+      this.getAllProducts()
     }
   }
 
